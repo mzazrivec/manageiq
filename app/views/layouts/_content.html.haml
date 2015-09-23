@@ -3,7 +3,16 @@
 - elsif inner_layout_present?
   .container-fluid{:style => "overflow: hidden; height: 100%; background: #fff;"}
     .row{:style => "height: 100%"}
-      .col-md-12#center_div{:style => "height: 100%"}
+      .col-md-4
+        #accordion.panel-group
+          - if @accords
+            - accord_names = @accords.map { |a| a[:name] }
+            - @accords.each_with_index do |a, i|
+              = patternfly_accordion_panel(a[:title], accord_names.include?(@sb[:active_accord]) ? a[:name] == @sb[:active_accord] : i == 0, a[:container]) do
+                - tree = @built_trees.detect { |t| t.type == a[:name].to_sym }
+                = render(:partial => "shared/tree",
+                         :locals  => {:tree => tree, :name => tree.name.to_s})
+      .col-md-8#center_div{:style => "height: 100%"}
 - else
   .container-fluid{:style => "overflow: hidden; height: 100%; background: #fff;"}
     .row.scrollable-sm#center_div{:style => "height: 100%"}
