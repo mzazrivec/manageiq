@@ -82,12 +82,12 @@ class ServiceController < ApplicationController
     end
 
     # Build the Explorer screen from scratch
-    @built_trees   = []
+    @trees   = []
     @accords = []
     if role_allows(:feature => "service", :any => true)
       self.x_active_tree   ||= 'svcs_tree'
       self.x_active_accord ||= 'svcs'
-      @built_trees << build_svcs_tree
+      @trees << build_svcs_tree
       @accords.push(:name      => "svcs",
                     :title     => "Services",
                     :container => "svcs_tree_div")

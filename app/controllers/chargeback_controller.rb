@@ -47,7 +47,7 @@ class ChargebackController < ApplicationController
     @breadcrumbs = []
     @explorer    = true
     @trees       = []
-    @built_trees = []
+    @trees = []
     @accords     = []
 
     if role_allows(:feature=>"chargeback_reports")
@@ -55,19 +55,19 @@ class ChargebackController < ApplicationController
       self.x_active_accord ||= 'cb_reports'
       tree = cb_rpts_build_tree
       cb_rpt_build_folder_nodes if x_node(:cb_reports_tree) == "root"
-      @built_trees << tree
+      @trees << tree
       @accords << {:name => "cb_reports", :title => "Reports", :container => "cb_reports_tree_div"}
     end
     if role_allows(:feature => "chargeback_rates")
       self.x_active_tree   ||= 'cb_rates_tree'
       self.x_active_accord ||= 'cb_rates'
-      @built_trees << cb_rates_build_tree
+      @trees << cb_rates_build_tree
       @accords << {:name => "cb_rates", :title => "Rates", :container => "cb_rates_tree_div"}
     end
     if role_allows(:feature => "chargeback_assignments")
       self.x_active_tree   ||= 'cb_assignments_tree'
       self.x_active_accord ||= 'cb_assignments'
-      @built_trees << cb_assignments_build_tree
+      @trees << cb_assignments_build_tree
       @accords << {:name => "cb_assignments", :title => "Assignments", :container => "cb_assignments_tree_div"}
     end
 

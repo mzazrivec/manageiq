@@ -69,12 +69,12 @@ class ContainerController < ApplicationController
     end
 
     # Build the Explorer screen from scratch
-    @built_trees   = []
+    @trees   = []
     @accords = []
     if role_allows(:feature => "container_accord", :any => true)
       self.x_active_tree   ||= 'containers_tree'
       self.x_active_accord ||= 'containers'
-      @built_trees.push(build_containers_tree)
+      @trees.push(build_containers_tree)
       @accords.push(:name      => "containers",
                     :title     => "Relationships",
                     :container => "containers_tree_div")
@@ -83,7 +83,7 @@ class ContainerController < ApplicationController
     if role_allows(:feature => "container_filter_accord", :any => true)
       self.x_active_tree   ||= 'containers_filter_tree'
       self.x_active_accord ||= 'containers_filter'
-      @built_trees.push(build_containers_filter_tree)
+      @trees.push(build_containers_filter_tree)
       @accords.push(:name      => "containers_filter",
                     :title     => "All Containers",
                     :container => "containers_filter_tree_div")

@@ -133,7 +133,7 @@ class MiqAeCustomizationController < ApplicationController
   end
 
   def explorer
-    @built_trees = []
+    @trees = []
     @flash_array = @sb[:flash_msg] unless @sb[:flash_msg].blank?
     @explorer = true
     build_resolve_screen
@@ -153,16 +153,16 @@ class MiqAeCustomizationController < ApplicationController
     @trees = Array.new
     @accords = Array.new
 
-    @built_trees << old_dialogs_build_tree
+    @trees << old_dialogs_build_tree
     @accords << {:name=>"old_dialogs", :title=>"Provisioning Dialogs", :container=>"old_dialogs_tree_div"}
 
-    @built_trees << dialog_build_tree
+    @trees << dialog_build_tree
     @accords << {:name=>"dialogs", :title=>"Service Dialogs", :container=>"dialogs_tree_div"}
 
-    @built_trees << ab_build_tree
+    @trees << ab_build_tree
     @accords << {:name=>"ab", :title=>"Buttons", :container=>"ab_tree_div"}
 
-    @built_trees << dialog_import_export_build_tree
+    @trees << dialog_import_export_build_tree
     @accords << {:name=>"dialog_import_export", :title=>"Import/Export", :container=>"dialog_import_export_tree_div"}
 
     get_node_info

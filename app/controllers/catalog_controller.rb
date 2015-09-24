@@ -196,7 +196,7 @@ class CatalogController < ApplicationController
     end
 
     # Build the Explorer screen from scratch
-    @built_trees = []
+    @trees = []
     @accords     = []
 
     x_last_active_tree = x_active_tree if x_active_tree
@@ -207,7 +207,7 @@ class CatalogController < ApplicationController
       self.x_active_accord = 'svccat'
       default_active_tree   ||= self.x_active_tree
       default_active_accord ||= self.x_active_accord
-      @built_trees << build_svccat_tree
+      @trees << build_svccat_tree
       @accords.push(:name => "svccat", :title => "Service Catalogs", :container => "svccat_tree_div")
     end
     if role_allows(:feature => "catalog_items_accord", :any => true)
@@ -215,7 +215,7 @@ class CatalogController < ApplicationController
       self.x_active_accord = 'sandt'
       default_active_tree   ||= self.x_active_tree
       default_active_accord ||= self.x_active_accord
-      @built_trees << build_st_tree
+      @trees << build_st_tree
       @accords.push(:name => "sandt", :title => "Catalog Items", :container => "sandt_tree_div")
     end
     if role_allows(:feature => "orchestration_templates_accord", :any => true)
@@ -223,7 +223,7 @@ class CatalogController < ApplicationController
       self.x_active_accord = 'ot'
       default_active_tree ||= x_active_tree
       default_active_accord ||= x_active_accord
-      @built_trees << build_orch_tmpl_tree
+      @trees << build_orch_tmpl_tree
       @accords.push(:name => "ot", :title => "Orchestration Templates", :container => "ot_tree_div")
     end
     if role_allows(:feature => "st_catalog_accord", :any => true)
@@ -231,7 +231,7 @@ class CatalogController < ApplicationController
       self.x_active_accord = 'stcat'
       default_active_tree   ||= self.x_active_tree
       default_active_accord ||= self.x_active_accord
-      @built_trees << build_stcat_tree
+      @trees << build_stcat_tree
       @accords.push(:name => "stcat", :title => "Catalogs", :container => "stcat_tree_div")
     end
     self.x_active_tree = default_active_tree

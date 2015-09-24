@@ -62,13 +62,13 @@ class PxeController < ApplicationController
     @breadcrumbs = []
     @explorer = true
     @sb[:open_tree_nodes] ||= []
-    @built_trees = []
+    @trees = []
     @accords = []
 
     if role_allows(:feature => "pxe_server_accord", :any => true)
       self.x_active_tree   ||= 'pxe_servers_tree'
       self.x_active_accord ||= 'pxe_servers'
-      @built_trees << pxe_server_build_tree
+      @trees << pxe_server_build_tree
       @accords.push(:name      => "pxe_servers",
                     :title     => "PXE Servers",
                     :container => "pxe_servers_tree_div",
@@ -78,7 +78,7 @@ class PxeController < ApplicationController
     if role_allows(:feature => "customization_template_accord", :any => true)
       self.x_active_tree   ||= 'customization_templates_tree'
       self.x_active_accord ||= 'customization_templates'
-      @built_trees << customization_template_build_tree
+      @trees << customization_template_build_tree
       @accords.push(:name      => "customization_templates",
                     :title     => "Customization Templates",
                     :container => "customization_templates_tree_div",
@@ -88,7 +88,7 @@ class PxeController < ApplicationController
     if role_allows(:feature => "pxe_image_type_accord", :any => true)
       self.x_active_tree   ||= 'pxe_image_types_tree'
       self.x_active_accord ||= 'pxe_image_types'
-      @built_trees << pxe_image_type_build_tree
+      @trees << pxe_image_type_build_tree
       @accords.push(:name      => "pxe_image_types",
                     :title     => "System Image Types",
                     :container => "pxe_image_types_tree_div",
@@ -98,7 +98,7 @@ class PxeController < ApplicationController
     if role_allows(:feature => "iso_datastore_accord", :any => true)
       self.x_active_tree   ||= 'iso_datastores_tree'
       self.x_active_accord ||= 'iso_datastores'
-      @built_trees << iso_datastore_build_tree
+      @trees << iso_datastore_build_tree
       @accords.push(:name      => "iso_datastores",
                     :title     => "ISO Datastores",
                     :container => "iso_datastores_tree_div",
