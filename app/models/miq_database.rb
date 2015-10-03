@@ -19,7 +19,7 @@ class MiqDatabase < ActiveRecord::Base
 
   default_values REGISTRATION_DEFAULT_VALUES
 
-  #TODO: move hard-coded update information
+  # TODO: move hard-coded update information
   def self.cfme_package_name
     "cfme-appliance"
   end
@@ -44,20 +44,15 @@ class MiqDatabase < ActiveRecord::Base
   end
 
   def self.seed
-    if self.exists?
-      self.first.lock do |db|
-        db.session_secret_token ||= SecureRandom.hex(64)
-        db.csrf_secret_token    ||= SecureRandom.hex(64)
-        db.update_repo_name     ||= registration_default_value_for_update_repo_name
-        db.save! if db.changed?
-      end
-    else
-      self.create!(
-        :session_secret_token => SecureRandom.hex(64),
-        :csrf_secret_token    => SecureRandom.hex(64),
-        :update_repo_name     => registration_default_value_for_update_repo_name
-      )
+    db = first || new
+    db.session_secret_token ||= SecureRandom.hex(64)
+    db.csrf_secret_token ||= SecureRandom.hex(64)
+    db.update_repo_name ||= registration_default_value_for_update_repo_name
+    if db.changed?
+      _log.info("#{db.new_record? ? "Creating" : "Updating"} MiqDatabase record")
+      db.save!
     end
+    db
   end
 
   def name
@@ -77,7 +72,7 @@ class MiqDatabase < ActiveRecord::Base
     VmdbTable.all
   end
 
-  def verify_credentials(auth_type=nil, options={})
+  def verify_credentials(auth_type = nil, _options = {})
     return true if auth_type == :registration_http_proxy
 
     MiqTask.wait_for_taskid(RegistrationSystem.verify_credentials_queue).task_results if auth_type == :registration

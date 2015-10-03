@@ -42,7 +42,7 @@ class Tenant < ActiveRecord::Base
   validate  :validate_only_one_root
   validates :description, :presence => true
   validates :name, :presence => true, :unless => :use_config_for_attributes?
-  validates :name, :uniqueness => {:scope => :ancestry, :message => "should be unique per parent" }
+  validates :name, :uniqueness => {:scope => :ancestry, :message => "should be unique per parent"}
 
   # FUTURE: allow more content_types
   validates_attachment_content_type :logo, :content_type => ['image/png']
@@ -62,6 +62,10 @@ class Tenant < ActiveRecord::Base
 
   def all_subprojects
     self.class.descendants_of(self).where(:divisible => false)
+  end
+
+  def accessible_tenant_ids(strategy = nil)
+    (strategy ? send(strategy) : []).append(id)
   end
 
   def name
@@ -188,9 +192,10 @@ class Tenant < ActiveRecord::Base
     roots.first
   end
 
+  # NOTE: returns the root tenant
   def self.seed
-    MiqRegion.my_region.lock do
-      Tenant.root_tenant || Tenant.create!(:use_config_for_attributes => true)
+    root_tenant || create!(:use_config_for_attributes => true) do |_|
+      _log.info("Creating root tenant")
     end
   end
 
@@ -222,7 +227,7 @@ class Tenant < ActiveRecord::Base
 
   # validates that there is only one tree
   def validate_only_one_root
-    if !(parent_id || parent)
+    unless parent_id || parent
       root = self.class.root_tenant
       errors.add(:parent, "required") if root && root != self
     end

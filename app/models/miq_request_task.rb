@@ -18,7 +18,7 @@ class MiqRequestTask < ActiveRecord::Base
 
   delegate :request_class, :task_description, :to => :class
 
-  validates_inclusion_of :status, :in => %w{ Ok Warn Error Timeout }
+  validates_inclusion_of :status, :in => %w( Ok Warn Error Timeout )
 
   include MiqRequestMixin
   include TenancyMixin
@@ -89,9 +89,9 @@ class MiqRequestTask < ActiveRecord::Base
   end
 
   def self.request_class
-    if self.is_or_subclass_of?(MiqProvision)
+    if self <= MiqProvision
       MiqProvisionRequest
-    elsif self.is_or_subclass_of?(MiqHostProvision)
+    elsif self <= MiqHostProvision
       MiqHostProvisionRequest
     else
       name.underscore.gsub(/_task$/, "_request").camelize.constantize

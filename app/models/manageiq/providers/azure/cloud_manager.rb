@@ -38,12 +38,35 @@ class ManageIQ::Providers::Azure::CloudManager < ManageIQ::Providers::CloudManag
 
   def verify_credentials(_auth_type = nil, options = {})
     connect(options)
-    rescue RestClient::Unauthorized
-      raise MiqException::MiqHostError, "Incorrect credentials - check your Azure Client ID and Client Key"
-    rescue StandardError => err
-      _log.error("Error Class=#{err.class.name}, Message=#{err.message}")
-      raise MiqException::MiqHostError, "Unexpected response returned from system, see log for details"
+  rescue RestClient::Unauthorized
+    raise MiqException::MiqHostError, "Incorrect credentials - check your Azure Client ID and Client Key"
+  rescue StandardError => err
+    _log.error("Error Class=#{err.class.name}, Message=#{err.message}")
+    raise MiqException::MiqHostError, "Unexpected response returned from system, see log for details"
 
     true
+  end
+
+  # Operations
+
+  def vm_start(vm, _options = {})
+    vm.provider_service.start(vm.name, vm.resource_group)
+    vm.update_attributes!(:raw_power_state => "VM starting")
+  rescue => err
+    _log.error "vm=[#{vm.name}], error: #{err}"
+  end
+
+  def vm_stop(vm, _options = {})
+    vm.provider_service.stop(vm.name, vm.resource_group)
+    vm.update_attributes!(:raw_power_state => "VM stopping")
+  rescue => err
+    _log.error "vm=[#{vm.name}], error: #{err}"
+  end
+
+  def vm_restart(vm, _options = {})
+    vm.provider_service.restart(vm.name, vm.resource_group)
+    vm.update_attributes!(:raw_power_state => "VM starting")
+  rescue => err
+    _log.error "vm=[#{vm.name}], error: #{err}"
   end
 end
