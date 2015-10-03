@@ -1,6 +1,6 @@
 = stylesheet_link_tag "service_dialogs"
 - content_for :trees do
-  - @built_trees.each do |tree|
+  - @trees.each do |tree|
     %div{:style => "display: none;"}
       = render(:partial => "shared/tree",
         :locals         => {:tree => tree, :name => tree.name.to_s})
